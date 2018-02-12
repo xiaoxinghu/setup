@@ -10,7 +10,7 @@ My =.eslintrc= file.
 
 * .eslintrc file
 
-#+BEGIN_SRC json :tangle ~/.eslintrc
+#+BEGIN_SRC json :tangle .dist/src/.eslintrc
   {
     "parser": "babel-eslint",
     "plugins": [ "react" ],

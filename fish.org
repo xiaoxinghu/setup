@@ -6,7 +6,7 @@ I am currently using [[https://fishshell.com/][fish]] as my default shell, this 
 
 * Install
 :PROPERTIES:
-:header-args: :tangle .dist/fish/bootstrap.sh :mkdirp yes :tangle-mode (identity #o755)
+:header-args: :tangle .dist/bin/install_fish :mkdirp yes :tangle-mode (identity #o755)
 :END:
 
 Install fish through homebrew.
@@ -44,7 +44,7 @@ Install plugins.
 
 * Config
 :PROPERTIES:
-:header-args: :tangle .dist/fish/config.fish :mkdirp yes
+:header-args: :tangle .dist/src/.config/fish/config.fish :mkdirp yes
 :END:
 fish config file `~/.config/fish/config.fish`.
 #+BEGIN_SRC conf
@@ -62,7 +62,7 @@ fish config file `~/.config/fish/config.fish`.
 
 * Plugins
 :PROPERTIES:
-:header-args: :tangle .dist/fish/fishfile :mkdirp yes
+:header-args: :tangle .dist/src/.config/fish/fishfile :mkdirp yes
 :END:
 [[https://github.com/fisherman/fisherman][fisherman]] is plugin manager for fish shell. I try not to use lots of plugins.
 The following content goes to `~/.config/fish/fishfile`.
@@ -75,7 +75,7 @@ The following content goes to `~/.config/fish/fishfile`.
 
 * Link
 
-#+BEGIN_SRC sh :tangle .dist/fish/bootstrap.sh
+#+BEGIN_SRC sh :tangle no
   [ -e ~/.config/fish/config.fish ] && rm ~/.config/fish/config.fish
   [ -e ~/.config/fish/fishfile ] && rm ~/.config/fish/fishfile
   ln -s $(pwd)/.dist/fish/config.fish ~/.config/fish/config.fish

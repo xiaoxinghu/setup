@@ -13,8 +13,3 @@ if [[ $SHELL != *"fish" ]]; then
 fi
 
 curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
-
-[ -e ~/.config/fish/config.fish ] && rm ~/.config/fish/config.fish
-[ -e ~/.config/fish/fishfile ] && rm ~/.config/fish/fishfile
-ln -s $(pwd)/.dist/fish/config.fish ~/.config/fish/config.fish
-ln -s $(pwd)/.dist/fish/fishfile ~/.config/fish/fishfile

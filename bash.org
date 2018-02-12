@@ -16,7 +16,7 @@ alias and function definitions, shell options, and prompt settings. (You
 could also put key bindings there, but for bash they normally go into
 =~/.inputrc=.)
 
-#+BEGIN_SRC sh :tangle .dist/bash/.bashrc :mkdirp yes
+#+BEGIN_SRC sh :tangle .dist/src/.bashrc :mkdirp yes
 
      # If not running interactively, don't do anything
      [[ $- != *i* ]] && return
@@ -44,7 +44,7 @@ such as programs that you want to start when you log in (but not graphical
 programs, they go into a different file), and environment variable
 definitions.
 
-#+BEGIN_SRC sh :tangle .dist/bash/.bash_profile :mkdirp yes
+#+BEGIN_SRC sh :tangle .dist/src/.bash_profile :mkdirp yes
 
      [[ -f ~/.bashrc ]] && . ~/.bashrc
 

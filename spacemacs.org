@@ -70,7 +70,7 @@ any time soon. But just in case, check the [[https://github.com/syl20bnr/spacema
 
 * Spacemacs Init File
 :PROPERTIES:
-:header-args: :tangle .dist/emacs/.spacemacs.d/init.el :mkdirp yes
+:header-args: :tangle .dist/src/.spacemacs.d/init.el :mkdirp yes
 :END:
 
 This section is the content of file =~/.spacemacs.d/init.el=.
@@ -549,7 +549,7 @@ My customized agenda commands.
 
 ** Capture
 
-#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/note.txt :mkdirp yes
+#+BEGIN_SRC text :tangle .dist/src/.emacs.d/templates/note.txt :mkdirp yes
        ,* %^{description}
        :LOGBOOK:
        - Added: %U
@@ -558,14 +558,14 @@ My customized agenda commands.
        %?
 #+END_SRC
 
-#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/todo.txt :mkdirp yes
+#+BEGIN_SRC text :tangle .dist/src/.emacs.d/templates/todo.txt :mkdirp yes
        ,* TODO %?
        :LOGBOOK:
        - Added: %U
        :END:
 #+END_SRC
 
-#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/link.txt :mkdirp yes
+#+BEGIN_SRC text :tangle .dist/src/.emacs.d/templates/link.txt :mkdirp yes
        ,* %?
        :LOGBOOK:
        - Added: %U
@@ -1078,7 +1078,7 @@ learn more about it. Mostly for me (at least right now), this is about
 =org-mode=.
 *** layers
 The =layers.el= file.
-#+BEGIN_SRC emacs-lisp :tangle .dist/emacs/.spacemacs.d/layers/config/layers.el :mkdirp yes
+#+BEGIN_SRC emacs-lisp :tangle .dist/src/.spacemacs.d/layers/config/layers.el :mkdirp yes
   (configuration-layer/declare-layers
    '(org))
 #+END_SRC
@@ -1088,7 +1088,7 @@ The =layers.el= file.
 
 *** packages
 :PROPERTIES:
-:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/packages.el :mkdirp yes
+:header-args: :tangle .dist/src/.spacemacs.d/layers/config/packages.el :mkdirp yes
 :END:
 The =packages.el= file.
 **** Package Dependencies.
@@ -1150,12 +1150,12 @@ solaire-mode config.
 
 *** config
 the =config.el= file.
-#+BEGIN_SRC emacs-lisp :tangle .dist/emacs/.spacemacs.d/layers/config/config.el :mkdirp yes
+#+BEGIN_SRC emacs-lisp :tangle .dist/src/.spacemacs.d/layers/config/config.el :mkdirp yes
   (defvar x/org-publish-root "~/publish")
 #+END_SRC
 *** funcs
 :PROPERTIES:
-:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/funcs.el :mkdirp yes
+:header-args: :tangle .dist/src/.spacemacs.d/layers/config/funcs.el :mkdirp yes
 :END:
 This is the =funcs.el= file.
 
@@ -1218,7 +1218,7 @@ Handy functions for org files.
 
 *** keybindings
 :PROPERTIES:
-:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/keybindings.el :mkdirp yes
+:header-args: :tangle .dist/src/.spacemacs.d/layers/config/keybindings.el :mkdirp yes
 :END:
 
 Customized keybindings. the =keybindings.el= file.
