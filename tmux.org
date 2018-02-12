@@ -1,6 +1,5 @@
-#+SETUPFILE: .setup
 #+TITLE: tmux
-#+DESCRIPTION: Yes, I use tmux too.
+#+DESC: Yes, I use tmux too.
 
 #+BEGIN_PREVIEW
 My current setup for my tmux.
@@ -8,7 +7,7 @@ My current setup for my tmux.
 
 #+TOC: headlines 3
 
-#+BEGIN_SRC conf :tangle ~/.tmux.conf
+#+BEGIN_SRC conf :tangle .dist/src/.tmux.conf
   set-option -g default-shell "${SHELL}"
   set-option -g default-command "reattach-to-user-namespace -l ${SHELL}"
 

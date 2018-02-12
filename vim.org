@@ -1,7 +1,7 @@
 #+SETUPFILE: .setup
 #+TITLE: Vim
-#+PROPERTY: header-args :tangle ~/.vimrc
-#+DESCRIPTION: Yes, I use vim too.
+#+PROPERTY: header-args :tangle .dist/src/.vimrc
+#+DESC: Yes, I use vim too.
 
 #+BEGIN_PREVIEW
 My current setup for my vim. Even I am a emacs user now, there always a place
