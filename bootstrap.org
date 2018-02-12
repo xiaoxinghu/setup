@@ -36,7 +36,7 @@ Borrowed from homebrew install script. get the git command of the system.
 
 * bootstrap
 
-#+BEGIN_SRC ruby :noweb yes :tangle bootstrap :tangle-mode (identity #o755)
+#+BEGIN_SRC ruby :noweb yes :tangle .dist/bin/bootstrap :tangle-mode (identity #o755)
   #!/System/Library/Frameworks/Ruby.framework/Versions/Current/usr/bin/ruby
 
   <<git>>

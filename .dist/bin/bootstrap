@@ -1,0 +1,27 @@
+#!/System/Library/Frameworks/Ruby.framework/Versions/Current/usr/bin/ruby
+
+def git
+
+  @git ||= if ENV["GIT"] && File.executable?(ENV["GIT"])
+             ENV["GIT"]
+           elsif Kernel.system "/usr/bin/which -s git"
+             "git"
+           else
+             exe = `xcrun -find git 2>/dev/null`.chomp
+             exe if $? && $?.success? && !exe.empty? && File.executable?(exe)
+           end
+
+  return unless @git
+  # Github only supports HTTPS fetches on 1.7.10 or later:
+  # https://help.github.com/articles/https-cloning-errors
+  `#{@git} --version` =~ /git version (\d\.\d+\.\d+)/
+  return if $1.nil?
+
+  @git
+end
+
+if git
+  Dir.chdir '/Users/xiaoxing/io' do
+    system git, "status"
+  end
+end
