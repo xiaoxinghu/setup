@@ -1,0 +1,130 @@
+#+SETUPFILE: .setup
+#+TITLE: macOS
+#+DESCRIPTION: Documentation of my special macOS tweaks.
+
+#+BEGIN_PREVIEW
+My daily driver is a MacBook Pro, this is the thing that I will run when I
+switch to a new computer.
+#+END_PREVIEW
+
+#+TOC: headlines 3
+
+* GUI environment
+The =plist= file for setting up =PATH= for GUI applications.
+
+#+BEGIN_SRC conf :tangle ~/Library/LaunchAgents/x.env.plist :mkdirp yes
+     <?xml version="1.0" encoding="UTF-8"?>
+     <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+     <plist version="1.0">
+       <dict>
+         <key>Label</key>
+         <string>x.env</string>
+         <key>ProgramArguments</key>
+         <array>
+           <string>sh</string>
+           <string>-c</string>
+           <string>
+             launchctl setenv PATH $PATH:/usr/local/bin:/usr/local/sbin
+           </string>
+
+         </array>
+         <key>RunAtLoad</key>
+         <true/>
+       </dict>
+     </plist>
+#+END_SRC
+
+* setup homebrew                                                         :sh:
+
+#+BEGIN_SRC sh :tangle no :results silent
+     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+     brew update
+     brew doctor
+     # brew tap Homebrew/bundle
+#+END_SRC
+
+* Brewfile
+
+** Basic
+
+These are the *must haves*, for any Mac machine that I have to be working on.
+#+BEGIN_SRC conf :tangle Brewfile
+  tap 'caskroom/cask'
+  tap 'caskroom/fonts'
+  tap 'railwaycat/emacsmacport'
+  brew 'tree'
+  brew 'git'
+  brew 'git-flow-avh'
+  brew 'hub'
+  brew 'coreutils'
+  brew 'fish'
+  brew 'vim'
+  brew 'emacs'
+  brew 'tmux'
+  brew 'reattach-to-user-namespace'
+  brew 'the_silver_searcher'
+  brew 'aspell', args: ['with-lang-en']
+  brew 'yarn'
+
+  # casks
+  cask 'google-chrome'
+  #cask 'emacs'
+  cask 'emacs-mac'
+  cask '1password'
+  cask 'istat-menus'
+  cask 'bartender'
+  cask 'slack'
+  cask 'skype'
+  cask 'hyper'
+  cask 'font-hack-nerd-font'
+#+END_SRC
+
+** Personal
+
+This list is for my personal computer.
+#+BEGIN_SRC conf
+  cask 'dropbox'
+  cask 'omnigraffle'
+  cask 'omnifocus'
+  cask 'plex-media-server'
+#+END_SRC
+
+
+* The Tweaks
+
+** iterm2
+
+Use zsh instead of bash. =command+,= -> =Profiles= -> =Command=. Set to =/usr/local/bin/zsh=.
+Enable system-wide hotkey.
+[[http://xor.lonnen.com/2013/01/04/emacs-on-osx.html][Enable =Meta= key for emacs]].
+
+* spell checking                                                         :sh:
+
+I choose not to tangle dictionary files because I want to use symbol links,
+for easy save new words.
+#+BEGIN_SRC sh :exports results :results output :tangle no
+    for file in "$(pwd -P)"/dictionary/*; do
+      target="${ZDOTDIR:-$HOME}/.$(basename $file)"
+      if [[ -h "$target" || -a "$target" ]]; then
+        rm "$target"
+      fi
+      ln -s "$file" "$target"
+    done
+#+END_SRC
+
+* fix ssh
+:PROPERTIES:
+:header-args: :tangle ~/.ssh/config :mkdirp yes
+:END:
+
+This is for fixing ssh keys in macOS Sierra. Following [[https://github.com/jirsbek/SSH-keys-in-macOS-Sierra-keychain][this]] article.
+#+BEGIN_SRC conf
+    Host *
+      AddKeysToAgent yes
+      UseKeychain yes
+      IdentityFile ~/.ssh/id_rsa
+#+END_SRC
+
+* Terminal.app color theme
+
+I am currently a fan of [[https://draculatheme.com/terminal/][dradula]] theme.

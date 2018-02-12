@@ -1,0 +1,83 @@
+#+TITLE: Fish
+#+DATE: 2018-01-01
+#+DESC: Fish is my daily driver for terminal.
+
+I am currently using [[https://fishshell.com/][fish]] as my default shell, this my setup.
+
+* Install
+:PROPERTIES:
+:header-args: :tangle .dist/fish/bootstrap.sh :mkdirp yes :tangle-mode (identity #o755)
+:END:
+
+Install fish through homebrew.
+#+BEGIN_SRC sh :results silent
+  #!/bin/bash
+  which -s fish || brew install fish
+#+END_SRC
+
+Add fish to ~/etc/shells~
+#+BEGIN_SRC sh :results silent
+  if grep -qF "fish" /etc/shells;then
+      echo 'fish is already in /etc/shells'
+  else
+      echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
+  fi
+#+END_SRC
+
+Change shell.
+#+BEGIN_SRC sh :results silent
+  if [[ $SHELL != *"fish" ]]; then
+      chsh -s /usr/local/bin/fish
+  fi
+#+END_SRC
+
+Install fisherman.
+#+BEGIN_SRC sh :results silent
+  curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
+#+END_SRC
+
+Install plugins.
+
+#+BEGIN_SRC sh :tangle no :results silent
+  fisher
+#+END_SRC
+
+* Config
+:PROPERTIES:
+:header-args: :tangle .dist/fish/config.fish :mkdirp yes
+:END:
+fish config file `~/.config/fish/config.fish`.
+#+BEGIN_SRC conf
+  set -g -x PATH /usr/local/bin $PATH
+  set -g -x fish_greeting ''
+  # turn off the fancy font
+  # set -g theme_powerline_fonts no
+  # use nerd font
+  set -g theme_nerd_fonts yes
+  # set JAVA_HOME
+  # set -Ux JAVA_HOME (/usr/libexec/java_home)
+  # rbenv
+  # status --is-interactive; and source (rbenv init -|psub)
+#+END_SRC
+
+* Plugins
+:PROPERTIES:
+:header-args: :tangle .dist/fish/fishfile :mkdirp yes
+:END:
+[[https://github.com/fisherman/fisherman][fisherman]] is plugin manager for fish shell. I try not to use lots of plugins.
+The following content goes to `~/.config/fish/fishfile`.
+
+#+BEGIN_SRC conf
+  oh-my-fish/theme-bobthefish
+#+END_SRC
+
+
+
+* Link
+
+#+BEGIN_SRC sh :tangle .dist/fish/bootstrap.sh
+  [ -e ~/.config/fish/config.fish ] && rm ~/.config/fish/config.fish
+  [ -e ~/.config/fish/fishfile ] && rm ~/.config/fish/fishfile
+  ln -s $(pwd)/.dist/fish/config.fish ~/.config/fish/config.fish
+  ln -s $(pwd)/.dist/fish/fishfile ~/.config/fish/fishfile
+#+END_SRC

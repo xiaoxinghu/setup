@@ -1,0 +1,66 @@
+#+SETUPFILE: .setup
+#+TITLE: Setup Bootstrap
+
+I have all my setups organized in different org files. It is very convenience to
+have the config/executable scripts organized along side with
+explanation/documentation. It's basically a living & executable documentation.
+The problem is that when I setup a new computer, I have to go through every one
+of them. So the bootstrap project is to solve that problem.
+
+This script is highly inspired by the [[https://github.com/Homebrew/install][homebrew install project]].
+
+* git helper function
+Borrowed from homebrew install script. get the git command of the system.
+#+NAME: git
+#+BEGIN_SRC ruby
+  def git
+
+    @git ||= if ENV["GIT"] && File.executable?(ENV["GIT"])
+               ENV["GIT"]
+             elsif Kernel.system "/usr/bin/which -s git"
+               "git"
+             else
+               exe = `xcrun -find git 2>/dev/null`.chomp
+               exe if $? && $?.success? && !exe.empty? && File.executable?(exe)
+             end
+
+    return unless @git
+    # Github only supports HTTPS fetches on 1.7.10 or later:
+    # https://help.github.com/articles/https-cloning-errors
+    `#{@git} --version` =~ /git version (\d\.\d+\.\d+)/
+    return if $1.nil?
+
+    @git
+  end
+#+END_SRC
+
+* bootstrap
+
+#+BEGIN_SRC ruby :noweb yes :tangle bootstrap :tangle-mode (identity #o755)
+  #!/System/Library/Frameworks/Ruby.framework/Versions/Current/usr/bin/ruby
+
+  <<git>>
+
+  if git
+    Dir.chdir '/Users/xiaoxing/io' do
+      system git, "status"
+    end
+  end
+#+END_SRC
+
+* Tangle
+:PROPERTIES:
+:header-args: :tangle .dist/bin/tangle.el :mkdirp yes :tangle-mode (identity #o755)
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  #!/usr/bin/env emacs --script
+
+  (require 'org)
+
+  (dolist (file argv)
+    (message "---> %s" file)
+    (find-file file)
+    (org-babel-tangle)
+    (kill-buffer))
+#+END_SRC

@@ -1,0 +1,109 @@
+#+SETUPFILE: .setup
+#+TITLE: zsh
+#+PROPERTY: header-args :tangle ~/.zshrc
+#+DESCRIPTION: Don't use zsh anymore (using fish instead), but still keep a snapshot of my setup.
+
+#+BEGIN_PREVIEW
+Probably not going to use zsh any time soon now (switched to fish now, [[file:fish.org][here]] is
+my setup), just in case.
+#+END_PREVIEW
+
+#+TOC: headlines 3
+
+
+* setup                                                                  :sh:
+Setting up zplug. According to [[https://github.com/zplug/zplug][zplug repo]].
+#+BEGIN_SRC sh :tangle no :results silent
+   curl -sL zplug.sh/installer | zsh
+#+END_SRC
+
+* plugins
+
+Init zplug. Remember to install zplug.
+#+BEGIN_SRC sh
+     source ~/.zplug/init.zsh
+#+END_SRC
+
+#+BEGIN_SRC sh
+
+     # zplug "zsh-users/zsh-history-substring-search"
+     # zplug "modules/history", from:prezto
+     zplug "modules/history-substring-search", from:prezto
+
+     zplug "lukechilds/zsh-nvm"
+
+     # zplug "plugins/git",   from:oh-my-zsh
+     zplug "modules/git", from:prezto
+     zplug "modules/utility", from:prezto
+     zplug "modules/ruby", from:prezto
+
+     # my scripts
+     zplug "xiaoxinghu/scripts", as:command, use:"bin/*"
+
+     # Load theme file
+     zplug 'dracula/zsh', as:theme
+
+     # Set the priority when loading
+     # e.g., zsh-syntax-highlighting must be loaded
+     # after executing compinit command and sourcing other plugins
+     # (If the defer tag is given 2 or above, run after compinit command)
+     zplug "zsh-users/zsh-syntax-highlighting", defer:2
+
+     # self managing
+     # zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+#+END_SRC
+
+Install plugins if there are plugins that have not been installed.
+#+BEGIN_SRC sh
+     if ! zplug check --verbose; then
+         printf "Install? [y/N]: "
+         if read -q; then
+             echo; zplug install
+         fi
+     fi
+#+END_SRC
+
+* personal config
+use case-insensitive completion if case-sensitive generated no hits
+#+BEGIN_SRC sh
+  zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}'
+  zstyle ':prezto:*:*' color 'yes'
+#+END_SRC
+
+Use GNU
+
+#+BEGIN_SRC sh
+  PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+  PATH="/usr/local/bin:$PATH"
+  MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
+#+END_SRC
+
+rbenv
+
+#+BEGIN_SRC sh
+  if (( $+commands[rbenv] )); then
+      eval "$(rbenv init - --no-rehash zsh)"
+  fi
+#+END_SRC
+
+nvm
+
+#+BEGIN_SRC sh
+  if [[ -s "$HOME/.nvm/nvm.sh" ]]; then
+      source "$HOME/.nvm/nvm.sh"
+  fi
+#+END_SRC
+
+android studio
+
+#+BEGIN_SRC sh
+  if [[ -s "$HOME/Library/Android/sdk" ]]; then
+      PATH="$HOME/Library/Android/sdk/tools/bin:$HOME/Library/Android/sdk/platform-tools:$PATH"
+  fi
+#+END_SRC
+
+* load
+#+BEGIN_SRC sh
+     # zplug load --verbose
+     zplug load
+#+END_SRC

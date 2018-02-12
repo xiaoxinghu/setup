@@ -1,0 +1,1231 @@
+#+SETUPFILE: .setup
+#+TITLE: Spacemacs
+#+DESCRIPTION: Why not taking adventage of the community?
+
+#+BEGIN_PREVIEW
+My current setup for my emacs, with spacemacs.
+#+END_PREVIEW
+
+#+TOC: headlines 3
+
+* Tasks                                                            :noexport:
+** TODO Tweaking Emacs Settings
+:LOGBOOK:
+CLOCK: [2017-08-22 Tue 15:11]--[2017-08-22 Tue 16:39] =>  1:28
+CLOCK: [2017-08-21 Mon 14:30]--[2017-08-21 Mon 14:49] =>  0:19
+:END:
+** TODO benckmark the init process
+Take a look at [[http://oremacs.com/2015/02/24/emacs-speed-test/][this]].
+** TODO Check these out
+- [ ][[https://www.emacswiki.org/emacs/OneOnOneEmacs][EmacsWiki: One On One Emacs]]
+- [ ][[https://www.emacswiki.org/emacs/FrameModes][EmacsWiki: Frame Modes]]
+** TODO snippets
+reference [[https://github.com/syl20bnr/spacemacs/blob/c788da709bb1c74344f5ab1b6f18cfdf6b930df8/layers/%252Bcompletion/auto-completion/packages.el][here]].
+** Easy Templates
+[[http://orgmode.org/manual/Easy-Templates.html][This]] is a very time saving cheatsheet.
+
+
+** CANCELLED Writing with org-mode and hexo
+CLOSED: [2017-08-23 Wed 10:15]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2017-08-23 Wed 10:15] \\
+  I use gatsbyjs now
+:END:
+** CANCELLED map C-h to SPC-h
+CLOSED: [2017-02-08 Wed 14:41]
+:LOGBOOK:
+- State "CANCELLED"  from "TODO"       [2017-02-08 Wed 14:41] \\
+  the current solution is good enough
+:END:
+** DONE publish org notes as whole
+CLOSED: [2017-09-14 Thu 11:22]
+** DONE setup syntax checking
+CLOSED: [2017-01-22 Sun 12:23]
+For javascript, react.js and es6 stuff. check [[http://codewinds.com/blog/2015-04-02-emacs-flycheck-eslint-jsx.html][here]].
+** DONE remove org src temp file
+CLOSED: [2017-01-22 Sun 12:57]
+=command+s= still saves the buffer
+** DONE prefix p, to counsel-projectile if not in a project
+CLOSED: [2017-01-23 Mon 14:16]
+* Background
+The setup is inspired by [[http://www.modernemacs.com/post/migrate-layers/][this]] article. The basic idea is to organize my own
+setup code into a private =spacemacs layer=. Simply because I don't want to have
+a gigantic =.spacemacs= file, nor tons of =(load-file ...)= in it. Gonna do it
+the spacemacs way. Nice and clean.
+
+This whole org file is the source code of my setup. I simply tangle the
+necessary code blocks into the right place, then magic happens.
+
+* Install Spacemacs
+:PROPERTIES:
+:dir:      ~/
+:END:
+
+The last time I checked, this still works. I don't think it's going to change
+any time soon. But just in case, check the [[https://github.com/syl20bnr/spacemacs][official document]].
+
+#+BEGIN_SRC sh
+ git clone https://github.com/syl20bnr/spacemacs ~/.emacs.d 
+#+END_SRC
+
+* Spacemacs Init File
+:PROPERTIES:
+:header-args: :tangle .dist/emacs/.spacemacs.d/init.el :mkdirp yes
+:END:
+
+This section is the content of file =~/.spacemacs.d/init.el=.
+
+** Layers
+
+I categorize my layers into the following categories.
+*** Core Layers
+The basic ones.
+#+NAME: org-mode-layer-core
+#+BEGIN_SRC emacs-lisp :tangle no
+  better-defaults
+  ivy
+  auto-completion
+  git
+  ;; (shell :variables
+  ;;        shell-default-height 30
+  ;;        shell-default-position 'bottom)
+  spell-checking
+  syntax-checking
+  version-control
+  emoji
+  deft
+  osx
+  finance
+  csv
+  pandoc
+  (org :variables
+       org-enable-org-journal-support t
+       org-enable-hugo-support t
+       org-enable-github-support t
+       org-projectile-file (concat org-directory "/projects.org")
+       org-enable-reveal-js-support t)
+#+END_SRC
+
+*** Programming Languages
+The ones that help my writing code.
+#+NAME: org-mode-layer-lang
+#+BEGIN_SRC emacs-lisp :tangle no
+  emacs-lisp
+  swift
+  html
+  javascript
+  markdown
+  ruby
+  graphviz
+  yaml
+  shell-scripts
+  react
+  windows-scripts
+  java
+  rust
+  python
+#+END_SRC
+
+*** Local Layers
+My local layers, currently only has one for all my customization.
+#+NAME: org-mode-layer-local
+#+BEGIN_SRC emacs-lisp :tangle no
+  (config
+   :location local)
+#+END_SRC
+
+*** Config the Layers
+Config the spacemacs layers. Include all the layers above.
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (defun dotspacemacs/layers ()
+    "Configuration Layers declaration.
+  You should not put any user code in this function besides modifying the variable
+  values."
+    (setq-default
+     dotspacemacs-distribution 'spacemacs
+     dotspacemacs-enable-lazy-installation 'unused
+     dotspacemacs-ask-for-lazy-installation t
+     dotspacemacs-configuration-layer-path '()
+     dotspacemacs-configuration-layers
+     '(
+       <<org-mode-layer-core>>
+       <<org-mode-layer-lang>>
+       <<org-mode-layer-local>>
+       )
+     dotspacemacs-additional-packages '()
+     dotspacemacs-frozen-packages '()
+     dotspacemacs-excluded-packages '()
+     dotspacemacs-install-packages 'used-only))
+#+END_SRC
+
+** Dotspacemacs Basic Settings
+This is a direct copy from the default spacemacs file, with small tweaks (e.g.
+the theme).
+#+BEGIN_SRC emacs-lisp
+  (defun dotspacemacs/init ()
+    "Initialization function.
+  This function is called at the very startup of Spacemacs initialization
+  before layers configuration.
+  You should not put any user code in there besides modifying the variable
+  values."
+    ;; This setq-default sexp is an exhaustive list of all the supported
+    ;; spacemacs settings.
+    (setq-default
+     ;; If non nil ELPA repositories are contacted via HTTPS whenever it's
+     ;; possible. Set it to nil if you have no way to use HTTPS in your
+     ;; environment, otherwise it is strongly recommended to let it set to t.
+     ;; This variable has no effect if Emacs is launched with the parameter
+     ;; `--insecure' which forces the value of this variable to nil.
+     ;; (default t)
+     dotspacemacs-elpa-https t
+     ;; Maximum allowed time in seconds to contact an ELPA repository.
+     dotspacemacs-elpa-timeout 5
+     ;; If non nil then spacemacs will check for updates at startup
+     ;; when the current branch is not `develop'. Note that checking for
+     ;; new versions works via git commands, thus it calls GitHub services
+     ;; whenever you start Emacs. (default nil)
+     dotspacemacs-check-for-update nil
+     ;; If non-nil, a form that evaluates to a package directory. For example, to
+     ;; use different package directories for different Emacs versions, set this
+     ;; to `emacs-version'.
+     dotspacemacs-elpa-subdirectory nil
+     ;; One of `vim', `emacs' or `hybrid'.
+     ;; `hybrid' is like `vim' except that `insert state' is replaced by the
+     ;; `hybrid state' with `emacs' key bindings. The value can also be a list
+     ;; with `:variables' keyword (similar to layers). Check the editing styles
+     ;; section of the documentation for details on available variables.
+     ;; (default 'vim)
+     dotspacemacs-editing-style 'vim
+     ;; If non nil output loading progress in `*Messages*' buffer. (default nil)
+     dotspacemacs-verbose-loading nil
+     ;; Specify the startup banner. Default value is `official', it displays
+     ;; the official spacemacs logo. An integer value is the index of text
+     ;; banner, `random' chooses a random text banner in `core/banners'
+     ;; directory. A string value must be a path to an image format supported
+     ;; by your Emacs build.
+     ;; If the value is nil then no banner is displayed. (default 'official)
+     dotspacemacs-startup-banner 'official
+     ;; List of items to show in startup buffer or an association list of
+     ;; the form `(list-type . list-size)`. If nil then it is disabled.
+     ;; Possible values for list-type are:
+     ;; `recents' `bookmarks' `projects' `agenda' `todos'."
+     ;; List sizes may be nil, in which case
+     ;; `spacemacs-buffer-startup-lists-length' takes effect.
+     dotspacemacs-startup-lists '((recents . 5)
+                        (projects . 7))
+     ;; True if the home buffer should respond to resize events.
+     dotspacemacs-startup-buffer-responsive t
+     ;; Default major mode of the scratch buffer (default `text-mode')
+     dotspacemacs-scratch-mode 'text-mode
+     ;; List of themes, the first of the list is loaded when spacemacs starts.
+     ;; Press <SPC> T n to cycle to the next theme in the list (works great
+     ;; with 2 themes variants, one dark and one light)
+     dotspacemacs-themes '(
+                 doom-one
+                 doom-one-light
+                 spacemacs-dark
+                 spacemacs-light
+                 zenburn)
+     ;; If non nil the cursor color matches the state color in GUI Emacs.
+     dotspacemacs-colorize-cursor-according-to-state t
+     ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
+     ;; quickly tweak the mode-line size to make separators look not too crappy.
+     dotspacemacs-default-font '("Source Code Pro"
+                       :size 13
+                       :weight normal
+                       :width normal
+                       :powerline-scale 1.1)
+     ;; The leader key
+     dotspacemacs-leader-key "SPC"
+     ;; The key used for Emacs commands (M-x) (after pressing on the leader key).
+     ;; (default "SPC")
+     dotspacemacs-emacs-command-key "SPC"
+     ;; The key used for Vim Ex commands (default ":")
+     dotspacemacs-ex-command-key ":"
+     ;; The leader key accessible in `emacs state' and `insert state'
+     ;; (default "M-m")
+     dotspacemacs-emacs-leader-key "M-m"
+     ;; Major mode leader key is a shortcut key which is the equivalent of
+     ;; pressing `<leader> m`. Set it to `nil` to disable it. (default ",")
+     dotspacemacs-major-mode-leader-key ","
+     ;; Major mode leader key accessible in `emacs state' and `insert state'.
+     ;; (default "C-M-m")
+     dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+     ;; These variables control whether separate commands are bound in the GUI to
+     ;; the key pairs C-i, TAB and C-m, RET.
+     ;; Setting it to a non-nil value, allows for separate commands under <C-i>
+     ;; and TAB or <C-m> and RET.
+     ;; In the terminal, these pairs are generally indistinguishable, so this only
+     ;; works in the GUI. (default nil)
+     dotspacemacs-distinguish-gui-tab nil
+     ;; If non nil `Y' is remapped to `y$' in Evil states. (default nil)
+     dotspacemacs-remap-Y-to-y$ nil
+     ;; If non-nil, the shift mappings `<' and `>' retain visual state if used
+     ;; there. (default t)
+     dotspacemacs-retain-visual-state-on-shift t
+     ;; If non-nil, J and K move lines up and down when in visual mode.
+     ;; (default nil)
+     dotspacemacs-visual-line-move-text nil
+     ;; If non nil, inverse the meaning of `g' in `:substitute' Evil ex-command.
+     ;; (default nil)
+     dotspacemacs-ex-substitute-global nil
+     ;; Name of the default layout (default "Default")
+     dotspacemacs-default-layout-name "Default"
+     ;; If non nil the default layout name is displayed in the mode-line.
+     ;; (default nil)
+     dotspacemacs-display-default-layout nil
+     ;; If non nil then the last auto saved layouts are resume automatically upon
+     ;; start. (default nil)
+     dotspacemacs-auto-resume-layouts nil
+     ;; Size (in MB) above which spacemacs will prompt to open the large file
+     ;; literally to avoid performance issues. Opening a file literally means that
+     ;; no major mode or minor modes are active. (default is 1)
+     dotspacemacs-large-file-size 1
+     ;; Location where to auto-save files. Possible values are `original' to
+     ;; auto-save the file in-place, `cache' to auto-save the file to another
+     ;; file stored in the cache directory and `nil' to disable auto-saving.
+     ;; (default 'cache)
+     dotspacemacs-auto-save-file-location 'cache
+     ;; Maximum number of rollback slots to keep in the cache. (default 5)
+     dotspacemacs-max-rollback-slots 5
+     ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
+     dotspacemacs-helm-resize nil
+     ;; if non nil, the helm header is hidden when there is only one source.
+     ;; (default nil)
+     dotspacemacs-helm-no-header nil
+     ;; define the position to display `helm', options are `bottom', `top',
+     ;; `left', or `right'. (default 'bottom)
+     dotspacemacs-helm-position 'bottom
+     ;; Controls fuzzy matching in helm. If set to `always', force fuzzy matching
+     ;; in all non-asynchronous sources. If set to `source', preserve individual
+     ;; source settings. Else, disable fuzzy matching in all sources.
+     ;; (default 'always)
+     dotspacemacs-helm-use-fuzzy 'always
+     ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
+     ;; several times cycle between the kill ring content. (default nil)
+     dotspacemacs-enable-paste-transient-state nil
+     ;; Which-key delay in seconds. The which-key buffer is the popup listing
+     ;; the commands bound to the current keystroke sequence. (default 0.4)
+     dotspacemacs-which-key-delay 0.4
+     ;; Which-key frame position. Possible values are `right', `bottom' and
+     ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
+     ;; right; if there is insufficient space it displays it at the bottom.
+     ;; (default 'bottom)
+     dotspacemacs-which-key-position 'bottom
+     ;; If non nil a progress bar is displayed when spacemacs is loading. This
+     ;; may increase the boot time on some systems and emacs builds, set it to
+     ;; nil to boost the loading time. (default t)
+     dotspacemacs-loading-progress-bar t
+     ;; If non nil the frame is fullscreen when Emacs starts up. (default nil)
+     ;; (Emacs 24.4+ only)
+     dotspacemacs-fullscreen-at-startup nil
+     ;; If non nil `spacemacs/toggle-fullscreen' will not use native fullscreen.
+     ;; Use to disable fullscreen animations in OSX. (default nil)
+     dotspacemacs-fullscreen-use-non-native nil
+     ;; If non nil the frame is maximized when Emacs starts up.
+     ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
+     ;; (default nil) (Emacs 24.4+ only)
+     dotspacemacs-maximized-at-startup nil
+     ;; A value from the range (0..100), in increasing opacity, which describes
+     ;; the transparency level of a frame when it's active or selected.
+     ;; Transparency can be toggled through `toggle-transparency'. (default 90)
+     dotspacemacs-active-transparency 90
+     ;; A value from the range (0..100), in increasing opacity, which describes
+     ;; the transparency level of a frame when it's inactive or deselected.
+     ;; Transparency can be toggled through `toggle-transparency'. (default 90)
+     dotspacemacs-inactive-transparency 90
+     ;; If non nil show the titles of transient states. (default t)
+     dotspacemacs-show-transient-state-title t
+     ;; If non nil show the color guide hint for transient state keys. (default t)
+     dotspacemacs-show-transient-state-color-guide t
+     ;; If non nil unicode symbols are displayed in the mode line. (default t)
+     dotspacemacs-mode-line-unicode-symbols t
+     ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
+     ;; scrolling overrides the default behavior of Emacs which recenters point
+     ;; when it reaches the top or bottom of the screen. (default t)
+     dotspacemacs-smooth-scrolling t
+     ;; Control line numbers activation.
+     ;; If set to `t' or `relative' line numbers are turned on in all `prog-mode' and
+     ;; `text-mode' derivatives. If set to `relative', line numbers are relative.
+     ;; This variable can also be set to a property list for finer control:
+     ;; '(:relative nil
+     ;;   :disabled-for-modes dired-mode
+     ;;                       doc-view-mode
+     ;;                       markdown-mode
+     ;;                       org-mode
+     ;;                       pdf-view-mode
+     ;;                       text-mode
+     ;;   :size-limit-kb 1000)
+     ;; (default nil)
+     dotspacemacs-line-numbers t
+     ;; Code folding method. Possible values are `evil' and `origami'.
+     ;; (default 'evil)
+     dotspacemacs-folding-method 'evil
+     ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
+     ;; (default nil)
+     dotspacemacs-smartparens-strict-mode nil
+     ;; If non-nil pressing the closing parenthesis `)' key in insert mode passes
+     ;; over any automatically added closing parenthesis, bracket, quote, etc…
+     ;; This can be temporary disabled by pressing `C-q' before `)'. (default nil)
+     dotspacemacs-smart-closing-parenthesis nil
+     ;; Select a scope to highlight delimiters. Possible values are `any',
+     ;; `current', `all' or `nil'. Default is `all' (highlight any scope and
+     ;; emphasis the current one). (default 'all)
+     dotspacemacs-highlight-delimiters 'all
+     ;; If non nil, advise quit functions to keep server open when quitting.
+     ;; (default nil)
+     dotspacemacs-persistent-server nil
+     ;; List of search tool executable names. Spacemacs uses the first installed
+     ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
+     ;; (default '("ag" "pt" "ack" "grep"))
+     dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+     ;; The default package repository used if no explicit repository has been
+     ;; specified with an installed package.
+     ;; Not used for now. (default nil)
+     dotspacemacs-default-package-repository nil
+     ;; Delete whitespace while saving buffer. Possible values are `all'
+     ;; to aggressively delete empty line and long sequences of whitespace,
+     ;; `trailing' to delete only the whitespace at end of lines, `changed'to
+     ;; delete only whitespace for changed lines or `nil' to disable cleanup.
+     ;; (default nil)
+     dotspacemacs-whitespace-cleanup nil
+     ))
+#+END_SRC
+
+#+RESULTS:
+: dotspacemacs/init
+
+** User Init
+#+BEGIN_SRC emacs-lisp
+  (defun dotspacemacs/user-init ()
+    "Initialization function for user code.
+  It is called immediately after `dotspacemacs/init', before layer configuration
+  executes.
+   This function is mostly useful for variables that need to be set
+  before packages are loaded. If you are unsure, you should try in setting them in
+  `dotspacemacs/user-config' first."
+    (setq custom-file (file-truename (concat dotspacemacs-directory "custom.el")))
+    (setq org-directory "~/io")
+    )
+#+END_SRC
+
+** User Config
+#+BEGIN_SRC emacs-lisp
+  (defun dotspacemacs/user-config ()
+    "Configuration function for user code.
+  This function is called at the very end of Spacemacs initialization after
+  layers configuration.
+  This is the place where most of your configurations should be done. Unless it is
+  explicitly specified that a variable should be set before a package is loaded,
+  you should place your code here."
+    (setq deft-directory "~/io"
+          deft-extensions '("org")
+          deft-recursive t)
+    (setq js2-strict-missing-semi-warning nil)
+    (setq js2-strict-trailing-comma-warning nil)
+    (setq org-ellipsis nil)
+    (setq spaceline-org-clock-p t)
+    (setq
+     org-journal-dir "~/io/journal/"
+     org-journal-file-format "%Y-%m-%d")
+
+    ;; javascript indent
+    (setq-default
+     ;; js2-mode
+     js2-basic-offset 2
+     js-indent-level 2
+     ;; web-mode
+     css-indent-offset 2
+     web-mode-markup-indent-offset 2
+     web-mode-css-indent-offset 2
+     web-mode-code-indent-offset 2
+     web-mode-attr-indent-offset 2)
+
+    (add-to-list 'auto-mode-alist '("\\.journal$" . ledger-mode))
+    (add-to-list 'auto-mode-alist '("\\.snap$" . js2-mode))
+
+    (custom-set-faces
+     '(org-level-1 ((t (:inherit outline-1 :height 1.0))))
+     '(org-level-2 ((t (:inherit outline-2 :height 1.0))))
+     '(org-level-3 ((t (:inherit outline-3 :height 1.0))))
+     '(org-level-4 ((t (:inherit outline-4 :height 1.0))))
+     '(org-level-5 ((t (:inherit outline-5 :height 1.0))))
+     )
+    )
+#+END_SRC
+
+* org-mode
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+
+This whole section is my config for =org-mode=. I am a heavy org-mode user, so
+this is huge.
+
+** The Basic Vars
+Some basic var defs.
+
+#+NAME: org-mode-vars
+#+BEGIN_SRC emacs-lisp 
+  (setq org-directory "~/io"
+        org-log-into-drawer 1
+        org-default-notes-file (concat org-directory "/inbox.org")
+        org-agenda-files (list org-directory
+                               (concat org-directory "/notes")
+                               (concat org-directory "/work")
+                               (concat org-directory "/projects"))
+        org-log-done t
+        org-startup-with-inline-images t
+        org-image-actual-width nil
+        org-startup-indented t
+        org-html-htmlize-output-type 'css
+        org-html-doctype "html5"
+        org-html-metadata-timestamp-format "%Y %b %d (%a)"
+        )
+#+END_SRC
+
+** Clocking
+About clocking.
+#+NAME: org-mode-clocking
+#+BEGIN_SRC emacs-lisp
+  (setq org-clock-persist t
+        org-clock-persist-query-resume nil
+        org-clock-out-remove-zero-time-clocks t)
+  (org-clock-persistence-insinuate)
+#+END_SRC
+** "TODO" Keywords
+My setup of the "TODO" keywords.
+#+NAME: org-mode-todo
+#+BEGIN_SRC emacs-lisp
+  (setq org-todo-keywords
+        (quote ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
+                (sequence "WAITING(w@/!)" "HOLD(h@/!)" "|" "CANCELLED(c@/!)")
+                )))
+
+  (setq org-todo-keyword-faces
+        (quote (("TODO" :foreground "red" :weight bold)
+                ("IDEA" :foreground "red" :weight bold)
+                ("NEXT" :foreground "deep sky blue" :weight bold)
+                ("DRAFT" :foreground "deep sky blue" :weight bold)
+                ("DONE" :foreground "forest green" :weight bold)
+                ("WAITING" :foreground "orange" :weight bold)
+                ("HOLD" :foreground "magenta" :weight bold)
+                ("PUBLISHED" :foreground "forest green" :weight bold)
+                ("CANCELLED" :foreground "forest green" :weight bold))))
+
+#+END_SRC
+** Agenda
+My customized agenda commands.
+#+NAME: org-mode-agenda
+#+BEGIN_SRC emacs-lisp
+  (setq org-agenda-custom-commands
+        '((" " "Home"
+           ((agenda "" nil)
+            (todo "NEXT"
+                  ((org-agenda-overriding-header "NEXT")))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "PROJECTS")
+                   (org-agenda-files (file-expand-wildcards "~/io/projects/*.org"))
+                   (org-agenda-sorting-strategy '(todo-state-up))
+                   ))
+            (todo "TODO"
+                  ((org-agenda-overriding-header "NOTES")
+                   (org-agenda-files (file-expand-wildcards "~/io/notes/*.org"))
+                   (org-agenda-sorting-strategy '(todo-state-up))
+                   ))
+            (todo "WAITING|HOLD"
+                  ((org-agenda-overriding-header "PENDING")
+                   (org-agenda-sorting-strategy '(todo-state-up))
+                   ))
+            ))
+          ("Q" . "Custom Queries")
+          ("Qn" "Note Search" search ""
+           ((org-agenda-files (file-expand-wildcards "~/io/notes/*.org"))))
+          ("w" "Writing"
+           ((agenda "")
+            (todo "DRAFT" ((org-agenda-overriding-header "Drafts")))
+            (todo "IDEA" ((org-agenda-overriding-header "Ideas")))))))
+#+END_SRC
+
+** Capture
+
+#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/note.txt :mkdirp yes
+       ,* %^{description}
+       :LOGBOOK:
+       - Added: %U
+       :END:
+
+       %?
+#+END_SRC
+
+#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/todo.txt :mkdirp yes
+       ,* TODO %?
+       :LOGBOOK:
+       - Added: %U
+       :END:
+#+END_SRC
+
+#+BEGIN_SRC text :tangle .dist/emacs/.emacs.d/templates/link.txt :mkdirp yes
+       ,* %?
+       :LOGBOOK:
+       - Added: %U
+       :END:
+       %^L
+#+END_SRC
+
+#+NAME: org-mode-capture
+#+BEGIN_SRC emacs-lisp
+  (setq org-capture-templates
+        `(("t" "todo" entry
+           (file+headline ,(concat org-directory "/desktop.org") "Inbox")
+           (file , "~/.emacs.d/templates/todo.txt")
+           ::empty-lines-before 1
+           ::empty-lines-after 1)
+          ("n" "note" entry
+           (file+headline ,(concat org-directory "/desktop.org") "Quick Notes")
+           (file , "~/.emacs.d/templates/note.txt")
+           ::empty-lines-before 1
+           ::empty-lines-after 1)
+          ("l" "link" entry
+           (file+headline ,(concat org-directory "/desktop.org") "Inbox")
+           (file , "~/.emacs.d/templates/link.txt")
+           ::empty-lines-before 1
+           ::empty-lines-after 1)
+          ))
+#+END_SRC
+
+** Archive
+About archiving behaviour.
+#+NAME: org-mode-archive
+#+BEGIN_SRC emacs-lisp
+  (setq org-archive-mark-done nil)
+  (setq org-archive-location "%s_archive::* Archived Tasks")
+#+END_SRC
+** Export
+
+#+NAME: org-mode-export
+#+BEGIN_SRC emacs-lisp
+  (require 'ox-man)
+#+END_SRC
+** Babel
+Babel setup, super important because I use literate programming *A LOT*.
+#+NAME: org-mode-babel
+#+BEGIN_SRC emacs-lisp
+  (require 'ob)
+  (require 'ob-shell)
+  (require 'ob-ruby)
+  (require 'ob-python)
+  (require 'ob-sass)
+  (require 'ob-tangle)
+  (setq org-src-fontify-natively t)
+  (setq org-confirm-babel-evaluate nil)
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((python . t)
+     (emacs-lisp . t)
+     (shell . t)
+     (ruby . t)
+     (sass . t)
+     (dot . t)
+     (java . t)
+     ))
+  (defun org-babel-execute:yaml (body params) body)
+
+#+END_SRC
+** Publishing
+This is about publishing my org files, generate a beautiful website. Sit tight!
+
+Take a look at this someday: [[https://github.com/fniessen/org-html-themes][GitHub - fniessen/org-html-themes: How to export Org mode files into awesome HTML in 2 minutes]] 
+
+*** Handy functions for publish
+
+#+NAME: org-mode-publishing-funcs
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (defun x/publish-src(x)
+    (get-string-from-file (format "%s/.publish/dist/%s" org-directory x)))
+
+  (defun x/publish-path (path)
+    (concat x/org-publish-root path))
+
+  (defun x/org-src (path)
+    (concat org-directory path))
+
+  (defun x/org-get-preview (file project)
+    "Get the preview text of file."
+    (let ((file (org-publish--expand-file-name file project)))
+      (with-temp-buffer
+        (insert-file-contents file)
+        (goto-char (point-min))
+        (let ((loc (re-search-forward "^#\\+BEGIN_PREVIEW$" nil t)))
+          (when loc
+            (goto-char loc)
+            (let ((beg (org-element-property :contents-begin (org-element-at-point)))
+                  (end (org-element-property :contents-end (org-element-at-point))))
+              (buffer-substring beg end))
+            )))))
+
+  (defun x/org-publish-sitemap (title list)
+    "site map, as a string.
+  TITLE is the the title of the site map.  LIST is an internal
+  representation for the files to include, as returned by
+  `org-list-to-lisp'.  PROJECT is the current project."
+    (concat "#+SETUPFILE: .setup" "\n"
+            "#+EXPORT_FILE_NAME: index.html" "\n"
+            "#+TITLE: " title "\n\n"
+            "#+HTML: <div class=\"index\">" "\n"
+            (org-list-to-subtree list)
+            "#+HTML: </div>"))
+
+  <<org-publish-sitemap-entry-format-post>>
+  <<org-publish-sitemap-entry-format-note>>
+  <<org-publish-sitemap-entry-format-setup>>
+
+  (defun x/org-publish-sitemap-entry-post (entry style project)
+    (x/org-publish-sitemap-entry
+     entry style project
+     x/org-publish-sitemap-entry-format-post))
+
+  (defun x/org-publish-sitemap-entry-note (entry style project)
+    (x/org-publish-sitemap-entry
+     entry style project
+     x/org-publish-sitemap-entry-format-note))
+
+  (defun x/org-publish-sitemap-entry-setup (entry style project)
+    (x/org-publish-sitemap-entry
+     entry style project
+     x/org-publish-sitemap-entry-format-setup))
+
+  (defun x/org-publish-sitemap-entry (entry style project fmt)
+    (cond ((not (directory-name-p entry))
+           (format-spec
+            fmt
+            `((?t . ,(org-publish-find-title entry project))
+              (?d . ,(format-time-string "%Y-%m-%d" (org-publish-find-date entry project)))
+              (?p . ,(org-publish-find-property entry :description project 'html))
+              (?f . ,entry))))
+          ((eq style 'tree)
+           ;; Return only last subdir.
+           (file-name-nondirectory (directory-file-name entry)))
+          (t entry)))
+#+END_SRC
+
+#+RESULTS: org-mode-publishing-funcs
+: x/sitemap-entry-format-posts
+
+*** POC                                                          :noexport:
+#+BEGIN_SRC emacs-lisp
+  (defun x/org-publish-sitemap (project entry-format &optional sitemap-filename)
+    "Generate the sitemap for my blog."
+    (let* ((project-plist (cdr project))
+           (dir (file-name-as-directory
+                 (plist-get project-plist :base-directory)))
+           (localdir (file-name-directory dir))
+           (exclude-regexp (plist-get project-plist :exclude))
+           (files (nreverse
+                   (org-publish-get-base-files project exclude-regexp)))
+           (sitemap-filename (concat dir (or sitemap-filename "sitemap.org")))
+           (sitemap-sans-extension
+            (plist-get project-plist :sitemap-sans-extension))
+           (visiting (find-buffer-visiting sitemap-filename))
+           file sitemap-buffer)
+      (with-current-buffer
+          (let ((org-inhibit-startup t))
+            (setq sitemap-buffer
+                  (or visiting (find-file sitemap-filename))))
+        (erase-buffer)
+        ;; (insert "#+SETUPFILE: .setup")
+        ;; loop through all of the files in the project
+        (while (setq file (pop files))
+          (let ((fn (file-name-nondirectory file))
+                (link file)
+                ;; (link ;; changed this to fix links. see postprocessor.
+                ;;  (file-relative-name file (file-name-as-directory
+                ;;                            (expand-file-name (concat (file-name-as-directory dir) "..")))))
+                (oldlocal localdir))
+            (when sitemap-sans-extension
+              (setq link (file-name-sans-extension link)))
+            ;; sitemap shouldn't list itself
+            (unless (equal (file-truename "index.org")
+                           (file-truename file))
+              (let (;; get the title and date of the current file
+                    (title (org-publish-format-file-entry "%t" file project-plist))
+                    (date (org-publish-format-file-entry "%d" file project-plist))
+                    ;; get the preview section from the current file
+                    (preview (x/org-get-preview file))
+                    (regexp "\\(.*\\)\\[\\([^][]+\\)\\]\\(.*\\)"))
+                ;; insert a horizontal line before every post, kill the first one
+                ;; before saving
+                (let ((entry
+                       (x/org-publish-format-file-entry
+                        org-publish-sitemap-file-entry-format file project-plist)))
+                  (insert entry))
+                ;; (insert (funcall entry-format title fn date preview))
+                ;; (insert "-----\n")
+                ;; (cond ((string-match-p regexp title)
+                ;;        (string-match regexp title)
+                ;;        ;; insert every post as headline
+                ;;        (insert (concat"* " (match-string 1 title)
+                ;;                       "[[file:" fn "]["
+                ;;                       (match-string 2 title)
+                ;;                       "]]" (match-string 3 title) "\n")))
+                ;;       (t (insert (concat "* [[file:" fn "][" title "]]\n"))))
+                ;; ;; add properties for `ox-rss.el' here
+                ;; (let ((rss-permalink (concat (file-name-sans-extension link) ".html"))
+                ;;       (rss-pubdate (format-time-string
+                ;;                     (car org-time-stamp-formats)
+                ;;                     (org-publish-find-date file))))
+                ;;   ;; (org-set-property "RSS_PERMALINK" rss-permalink)
+                ;;   (org-set-property "PUBDATE" rss-pubdate))
+                ;; ;; insert the date, preview, & read more link
+                ;; (insert (concat date "\n\n"))
+                ;; (insert preview)
+                ;; (insert (concat "[[file:" fn "][Read More...]]\n"))
+                ))))
+        ;; kill the first hrule to make this look OK
+        (goto-char (point-min))
+        (let ((kill-whole-line t)) (kill-line))
+        (save-buffer))
+      (or visiting (kill-buffer sitemap-buffer))))
+
+  (defun x/org-publish-org-sitemap (project &optional sitemap-filename)
+    "Create a sitemap of pages in set defined by PROJECT.
+    Optionally set the filename of the sitemap with SITEMAP-FILENAME.
+    Default for SITEMAP-FILENAME is `sitemap.org'."
+    (let* ((project-plist (cdr project))
+           (dir (file-name-as-directory
+                 (plist-get project-plist :base-directory)))
+           (localdir (file-name-directory dir))
+           (indent-str (make-string 2 ?\s))
+           (exclude-regexp (plist-get project-plist :exclude))
+           (files (nreverse
+                   (org-publish-get-base-files project exclude-regexp)))
+           (sitemap-filename (concat dir (or sitemap-filename "sitemap.org")))
+           (sitemap-title (or (plist-get project-plist :sitemap-title)
+                              (concat "Sitemap for project " (car project))))
+           (sitemap-style (or (plist-get project-plist :sitemap-style)
+                              'tree))
+           (sitemap-sans-extension
+            (plist-get project-plist :sitemap-sans-extension))
+           (visiting (find-buffer-visiting sitemap-filename))
+           (sitemap-format-entry (plist-get project-plist :sitemap-format-entry))
+           file sitemap-buffer)
+      (with-current-buffer
+          (let ((org-inhibit-startup t))
+            (setq sitemap-buffer
+                  (or visiting (find-file sitemap-filename))))
+        (erase-buffer)
+        (insert "#+SETUPFILE: .setup\n")
+        (insert (concat "#+TITLE: " sitemap-title "\n\n"))
+        (while (setq file (pop files))
+          (let ((link (file-relative-name file dir))
+                (oldlocal localdir))
+            (when sitemap-sans-extension
+              (setq link (file-name-sans-extension link)))
+            ;; sitemap shouldn't list itself
+            (unless (file-equal-p sitemap-filename file)
+              ;; This is common to 'flat and 'tree
+              (let ((entry
+                     (x/org-publish-format-file-entry
+                      (funcall sitemap-format-entry) file link project-plist))
+                    (regexp "\\(.*\\)\\[\\([^][]+\\)\\]\\(.*\\)"))
+                (insert entry)
+                ))))
+        (save-buffer))
+      (or visiting (kill-buffer sitemap-buffer))))
+#+END_SRC
+
+*** Home
+This is the home page and all the other stuff.
+#+NAME: org-mode-publishing-home
+#+BEGIN_SRC emacs-lisp
+  ("home"
+   :base-directory ,(x/org-src "/")
+   :base-extension "org"
+   :publishing-directory ,(x/publish-path "/")
+   :publishing-function org-html-publish-to-html
+   :exclude "inbox.org"   ;; regexp
+   :headline-levels 3
+
+   :with-todo-keywords nil
+   :section-numbers nil
+   :html-head ,(x/publish-src "head.html")
+   :html-preamble t
+   :html-postamble t
+   :with-toc nil)
+
+#+END_SRC
+
+*** Notes
+The =Notes= category.
+
+#+NAME: org-publish-sitemap-entry-format-note
+#+BEGIN_SRC emacs-lisp
+  (setq x/org-publish-sitemap-entry-format-note
+        (mapconcat
+         'identity
+         '("[[file:%f][%t]]"
+           "") "\n"))
+#+END_SRC
+
+#+NAME: org-mode-publishing-notes
+#+BEGIN_SRC emacs-lisp
+  ("notes"
+   :base-directory ,(x/org-src "/notes/")
+   :base-extension "org"
+   :publishing-directory ,(x/publish-path "/notes/")
+   :publishing-function org-html-publish-to-html
+   ;; :exclude "PrivatePage.org"   ;; regexp
+
+   ;; sitemap
+   :auto-sitemap t
+   :sitemap-title "Notes"
+   :sitemap-function x/org-publish-sitemap
+   :sitemap-date-format "Published: %a %b %d %Y"
+   :sitemap-sort-files anti-chronologically
+   :sitemap-format-entry x/org-publish-notes-sitemap-entry
+   :sitemap-filename ".index.org"
+
+   :html-head ,(x/publish-src "head.html")
+   :html-preamble t
+   :html-postamble t)
+#+END_SRC
+*** Posts
+The =Posts= category.
+
+Site map format.
+#+NAME: org-publish-sitemap-entry-format-post
+#+BEGIN_SRC emacs-lisp
+  (setq x/org-publish-sitemap-entry-format-post
+        (mapconcat
+         'identity
+         '("[[file:%f][%t]] [%d]"
+           "%p"
+           "") "\n"))
+#+END_SRC
+
+#+NAME: org-mode-publishing-posts
+#+BEGIN_SRC emacs-lisp
+  ("posts"
+   :base-directory ,(x/org-src "/posts/")
+   :base-extension "org"
+   :exclude "^\\..+"
+   :publishing-directory ,(x/publish-path "/posts/")
+   :publishing-function org-html-publish-to-html
+
+   ;; sitemap
+   :auto-sitemap t
+   :sitemap-title "Posts"
+   :sitemap-function x/org-publish-sitemap
+   :sitemap-date-format "%Y %b %d (%a)"
+   :sitemap-sort-files anti-chronologically
+   ;; :sitemap-format-entry x/sitemap-entry-format-posts
+   :sitemap-format-entry x/org-publish-sitemap-entry-post
+   :sitemap-filename ".index.org"
+
+   :html-head ,(x/publish-src "head.html")
+   :html-preamble t
+   :html-postamble t)
+#+END_SRC
+
+*** COMMENT Projects
+My =Projects=.
+#+NAME: org-mode-publishing-projects
+#+BEGIN_SRC emacs-lisp
+  ("projects"
+   :base-directory ,(x/org-src "/projects/")
+   :base-extension "org"
+   :exclude "^\\..+"
+   :publishing-directory ,(x/publish-path "/projects/")
+   :publishing-function org-html-publish-to-html
+
+   ;; sitemap
+   :auto-sitemap t
+   :sitemap-title "Projects"
+   ;:sitemap-function x/org-publish-org-sitemap
+   :sitemap-date-format "%a %b %d %Y"
+   :sitemap-sort-files anti-chronologically
+   ;; :sitemap-format-entry x/sitemap-entry-format-notes
+   :sitemap-filename ".index.org"
+
+   :html-head ,(x/publish-src "head.html")
+   :html-preamble t
+   :html-postamble t)
+#+END_SRC
+
+*** Setup
+
+#+NAME: org-publish-sitemap-entry-format-setup
+#+BEGIN_SRC emacs-lisp
+  (setq x/org-publish-sitemap-entry-format-setup
+        (mapconcat
+         'identity
+         '("[[file:%f][%t]]"
+           "%p"
+           "") "\n"))
+#+END_SRC
+
+#+NAME: org-mode-publishing-setup
+#+BEGIN_SRC emacs-lisp
+  ("setup"
+   :base-directory ,(x/org-src "/setup/")
+   :base-extension "org"
+   :publishing-directory ,(x/publish-path "/setup/")
+   :publishing-function org-html-publish-to-html
+
+   ;; sitemap
+   :auto-sitemap t
+   :sitemap-title "My Setup"
+   :sitemap-function x/org-publish-sitemap
+   :sitemap-date-format "%a %b %d %Y"
+   ;; :sitemap-sort-files anti-chronologically
+   :sitemap-format-entry x/org-publish-sitemap-entry-setup
+   :sitemap-filename ".index.org"
+
+   :html-head ,(x/publish-src "head.html")
+   :html-preamble t
+   :html-postamble t)
+#+END_SRC
+
+*** Resources
+All the necessary style file and javascript.
+#+NAME: org-mode-publishing-res
+#+BEGIN_SRC emacs-lisp
+  ("res"
+   :base-directory ,(x/org-src "/.publish/dist/")
+   :base-extension "css\\|js\\|svg"
+   :recursive t
+   :publishing-directory ,(x/publish-path "/")
+   :publishing-function org-publish-attachment)
+#+END_SRC
+*** The publish setup
+This is the whole setup.
+#+NAME: org-mode-publishing
+#+BEGIN_SRC emacs-lisp :noweb yes
+  <<org-mode-publishing-funcs>>
+  (setq org-html-preamble-format `(("en" ,(x/publish-src "preamble.html"))))
+  (setq org-html-postamble-format `(("en" ,(x/publish-src "postamble.html"))))
+
+  (setq org-publish-project-alist
+        `(
+          <<org-mode-publishing-home>>
+          <<org-mode-publishing-notes>>
+          <<org-mode-publishing-posts>>
+          <<org-mode-publishing-projects>>
+          <<org-mode-publishing-setup>>
+          <<org-mode-publishing-res>>
+
+          ("images"
+           :base-directory ,(x/org-src "/img/")
+           :base-extension "jpg\\|gif\\|png"
+           :publishing-directory ,(x/publish-path "/images/")
+           :publishing-function org-publish-attachment)
+
+          ("website" :components ("home" "posts" "setup" "images" "res"))))
+#+END_SRC
+
+*** Production Script
+:PROPERTIES:
+:header-args: :tangle ../.publish/publish.el :mkdirp yes :tangle-mode (identity #o755)
+:END:
+
+#+BEGIN_SRC emacs-lisp :noweb yes
+  #!/usr/bin/env emacs --script
+
+  (require 'package)
+  (package-initialize)
+  (require 'org)
+  (require 'ox)
+  (require 'ox-publish)
+  (require 'ox-html)
+  (require 'htmlize)
+
+  (setq make-backup-files nil)
+  ;(setq debug-on-error t)
+
+  (setq org-confirm-babel-evaluate nil)
+  ;; (defun org-babel-execute:yaml (body params) body)
+  (setq org-export-allow-bind-keywords t)
+  ;; (setq src "~/io/notes/")
+  ;; (setq dest "~/Projects/home/source/_posts/")
+  (message org-version)
+  ;; (message load-path)
+
+  (defvar x/org-publish-root ".build")
+
+  <<org-mode-handy>>
+
+  <<org-mode-vars>>
+  <<org-mode-clocking>>
+  <<org-mode-todo>>
+  <<org-mode-agenda>>
+  <<org-mode-archive>>
+  <<org-mode-babel>>
+  <<org-mode-publishing>>
+
+  (org-publish-project "website" t)
+  (kill-buffer)
+#+END_SRC
+*** Troubleshooting
+I experienced an export issue on one of my org files, like [[https://github.com/syl20bnr/spacemacs/issues/6296][this one]]. And the
+solution is to recompile the elpa binaries. I have a function for that called
+[[*funcs][config/recompile-elpa]].
+
+* Personal Layers
+
+** Config
+This is my local layer. Take a look at the [[http://spacemacs.org/doc/LAYERS.html][official document about layers]] to
+learn more about it. Mostly for me (at least right now), this is about
+=org-mode=.
+*** layers
+The =layers.el= file.
+#+BEGIN_SRC emacs-lisp :tangle .dist/emacs/.spacemacs.d/layers/config/layers.el :mkdirp yes
+  (configuration-layer/declare-layers
+   '(org))
+#+END_SRC
+
+#+RESULTS:
+| org |
+
+*** packages
+:PROPERTIES:
+:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/packages.el :mkdirp yes
+:END:
+The =packages.el= file.
+**** Package Dependencies.
+#+BEGIN_SRC emacs-lisp
+#+END_SRC
+
+**** org-mode
+
+The post-init-org
+#+BEGIN_SRC emacs-lisp :noweb yes
+  (setq config-packages
+        '(
+          (org :location built-in)
+          worf
+          solaire-mode
+          ))
+
+  (defun config/post-init-org ()
+    <<org-mode-vars>>
+    <<org-mode-clocking>>
+    <<org-mode-todo>>
+    <<org-mode-agenda>>
+    <<org-mode-capture>>
+    <<org-mode-archive>>
+    <<org-mode-export>>
+    <<org-mode-babel>>
+    <<org-mode-publishing>>
+    (with-eval-after-load 'org
+      (require 'ox-extra)
+      (ox-extras-activate '(ignore-headlines)))
+    )
+
+  (defun config/init-worf ()
+    (use-package worf
+      :diminish worf-mode
+      :after org)
+    )
+#+END_SRC
+
+solaire-mode config.
+#+BEGIN_SRC emacs-lisp
+  (defun config/init-solaire-mode ()
+    (use-package solaire-mode
+      :config
+      ;; brighten buffers (that represent real files)
+      (add-hook 'after-change-major-mode-hook #'turn-on-solaire-mode)
+
+      ;; ...if you use auto-revert-mode:
+      (add-hook 'after-revert-hook #'turn-on-solaire-mode)
+
+      ;; You can do similar with the minibuffer when it is activated:
+      (add-hook 'minibuffer-setup-hook #'solaire-mode-in-minibuffer)
+
+      ;; To enable solaire-mode unconditionally for certain modes:
+      (add-hook 'ediff-prepare-buffer-hook #'solaire-mode)
+      )
+    )
+#+END_SRC
+
+*** config
+the =config.el= file.
+#+BEGIN_SRC emacs-lisp :tangle .dist/emacs/.spacemacs.d/layers/config/config.el :mkdirp yes
+  (defvar x/org-publish-root "~/publish")
+#+END_SRC
+*** funcs
+:PROPERTIES:
+:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/funcs.el :mkdirp yes
+:END:
+This is the =funcs.el= file.
+
+Recompile elpa packages. Found this snippet when org-mode babel was not working
+for me after fresh reinstall (of emacs and everything).
+#+BEGIN_SRC emacs-lisp
+  (defun config/recompile-elpa ()
+    "Recompile packages in elpa directory. Useful if you switch
+    Emacs versions."
+    (interactive)
+    (byte-recompile-directory package-user-dir nil t))
+#+END_SRC
+
+Save links to org-file, automatically grab the title of the page as the
+description.
+#+BEGIN_SRC emacs-lisp
+  (require 'mm-url)
+  (defun get-html-title-from-url (url)
+    "Return content in <title> tag."
+    (let (x1 x2 (download-buffer (url-retrieve-synchronously url)))
+      (save-excursion
+        (set-buffer download-buffer)
+        (beginning-of-buffer)
+        (setq x1 (search-forward "<title>"))
+        (search-forward "</title>")
+        (setq x2 (search-backward "<"))
+        (mm-url-decode-entities-string (buffer-substring-no-properties x1 x2)))))
+
+  (defun x/org-insert-link-with-title ()
+    "Insert org link where default description is set to html title."
+    (interactive)
+    (let* ((url (read-string "URL: "))
+           (title (get-html-title-from-url url)))
+      (org-insert-link nil url title)))
+#+END_SRC
+
+Handy functions for org files.
+#+NAME: org-mode-handy
+#+BEGIN_SRC emacs-lisp
+  (defun org-files/work ()
+    (file-expand-wildcards (concat org-directory "/work/*.org"))
+    )
+
+  (defun org-files/porject ()
+    (file-expand-wildcards (concat org-directory "/projects/*.org"))
+    )
+
+  (defun get-string-from-file (filePath)
+    "Return filePath's file content."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (buffer-string)))
+
+  (defun read-lines (filePath)
+    "Return a list of lines of a file at filePath."
+    (with-temp-buffer
+      (insert-file-contents filePath)
+      (split-string (buffer-string) "\n" t)))
+#+END_SRC
+
+*** keybindings
+:PROPERTIES:
+:header-args: :tangle .dist/emacs/.spacemacs.d/layers/config/keybindings.el :mkdirp yes
+:END:
+
+Customized keybindings. the =keybindings.el= file.
+
+#+BEGIN_SRC emacs-lisp
+  (spacemacs/set-leader-keys-for-major-mode 'org-mode
+    "iL" 'x/org-insert-link-with-title)
+#+END_SRC
+
+
