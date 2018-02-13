@@ -1229,3 +1229,13 @@ Customized keybindings. the =keybindings.el= file.
 #+END_SRC
 
 
+
+* Utils
+
+#+BEGIN_SRC conf :tangle .dist/src/.spacemacs.d/.link_folder :mkdirp yes
+link the whole folder
+#+END_SRC
+
+#+BEGIN_SRC conf :tangle .dist/src/.emacs.d/templates/.link_folder :mkdirp yes
+link the whole folder
+#+END_SRC
