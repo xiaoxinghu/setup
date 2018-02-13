@@ -35,14 +35,28 @@ The =plist= file for setting up =PATH= for GUI applications.
 #+END_SRC
 
 * setup homebrew                                                         :sh:
+:PROPERTIES:
+:header-args: :tangle no :results output
+:END:
 
-#+NAME: setup_homebrew
-#+BEGIN_SRC sh :tangle no :results output
-  if ![[ which -s brew ]]; then
+#+NAME: install_homebrew
+#+BEGIN_SRC sh
+  which -s brew
+  if [[ $? != 0 ]]; then
+      echo "install homebrew"
       /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   fi
-  brew update
   # brew tap Homebrew/bundle
+#+END_SRC
+
+#+NAME: update_homebrew
+#+BEGIN_SRC sh
+  brew update
+#+END_SRC
+
+#+NAME: install_bundle
+#+BEGIN_SRC sh
+  brew bundle --file=.dist/Brewfile
 #+END_SRC
 
 * Brewfile
@@ -107,27 +121,28 @@ Enable system-wide hotkey.
 
 I choose not to tangle dictionary files because I want to use symbol links,
 for easy save new words.
-#+BEGIN_SRC sh :exports results :results output :tangle no :eval no
-    for file in "$(pwd -P)"/dictionary/*; do
+#+NAME: link_dictionary
+#+BEGIN_SRC sh :exports results :results output :tangle no
+  for file in "$(pwd -P)"/resources/*; do
       target="${ZDOTDIR:-$HOME}/.$(basename $file)"
       if [[ -h "$target" || -a "$target" ]]; then
-        rm "$target"
+          rm "$target"
       fi
       ln -s "$file" "$target"
-    done
+  done
 #+END_SRC
 
 * fix ssh
 :PROPERTIES:
-:header-args: :tangle .dist/src/.ssh/config :mkdirp yes
+:header-args: :tangle .dist/src/.ssh/config :mkdirp yes :eval no
 :END:
 
 This is for fixing ssh keys in macOS Sierra. Following [[https://github.com/jirsbek/SSH-keys-in-macOS-Sierra-keychain][this]] article.
-#+BEGIN_SRC conf :eval no
-    Host *
-      AddKeysToAgent yes
-      UseKeychain yes
-      IdentityFile ~/.ssh/id_rsa
+#+BEGIN_SRC conf
+  Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_rsa
 #+END_SRC
 
 * Terminal.app color theme
