@@ -12,7 +12,7 @@ switch to a new computer.
 * GUI environment
 The =plist= file for setting up =PATH= for GUI applications.
 
-#+BEGIN_SRC conf :tangle ~/Library/LaunchAgents/x.env.plist :mkdirp yes
+#+BEGIN_SRC conf :tangle .dist/src/Library/LaunchAgents/x.env.plist :mkdirp yes
      <?xml version="1.0" encoding="UTF-8"?>
      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
      <plist version="1.0">
@@ -48,7 +48,7 @@ The =plist= file for setting up =PATH= for GUI applications.
 ** Basic
 
 These are the *must haves*, for any Mac machine that I have to be working on.
-#+BEGIN_SRC conf :tangle Brewfile
+#+BEGIN_SRC conf :tangle .dist/Brewfile
   tap 'caskroom/cask'
   tap 'caskroom/fonts'
   tap 'railwaycat/emacsmacport'
@@ -114,7 +114,7 @@ for easy save new words.
 
 * fix ssh
 :PROPERTIES:
-:header-args: :tangle ~/.ssh/config :mkdirp yes
+:header-args: :tangle .dist/src/.ssh/config :mkdirp yes
 :END:
 
 This is for fixing ssh keys in macOS Sierra. Following [[https://github.com/jirsbek/SSH-keys-in-macOS-Sierra-keychain][this]] article.
