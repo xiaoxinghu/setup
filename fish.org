@@ -5,6 +5,9 @@
 I am currently using [[https://fishshell.com/][fish]] as my default shell, this my setup.
 
 * Install
+:PROPERTIES:
+:header-args: :file .output/install_fish
+:END:
 
 Install fish through homebrew.
 #+NAME: install_fish
@@ -25,7 +28,7 @@ Add fish to ~/etc/shells~
 
 Change shell.
 #+NAME: change_shell
-#+BEGIN_SRC sh :results output
+#+BEGIN_SRC sh :results result
   if [[ $SHELL != *"fish" ]]; then
       chsh -s /usr/local/bin/fish
   else

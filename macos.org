@@ -36,7 +36,7 @@ The =plist= file for setting up =PATH= for GUI applications.
 
 * setup homebrew                                                         :sh:
 :PROPERTIES:
-:header-args: :tangle no :results output
+:header-args: :tangle no :results output :file .output/setup_homebrew :mkdirp yes
 :END:
 
 #+NAME: install_homebrew
@@ -107,7 +107,6 @@ This list is for my personal computer.
   cask 'omnifocus'
   cask 'plex-media-server'
 #+END_SRC
-
 
 * The Tweaks
 
