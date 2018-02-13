@@ -1,0 +1,3 @@
+#+TITLE: Setup of My Computer
+
+This project holds most of important setup information of my computer.
