@@ -5,18 +5,17 @@
 I am currently using [[https://fishshell.com/][fish]] as my default shell, this my setup.
 
 * Install
-:PROPERTIES:
-:header-args: :tangle .dist/bin/install_fish :mkdirp yes :tangle-mode (identity #o755)
-:END:
 
 Install fish through homebrew.
-#+BEGIN_SRC sh :results silent
+#+NAME: install_fish
+#+BEGIN_SRC sh :results output
   #!/bin/bash
   which -s fish || brew install fish
 #+END_SRC
 
 Add fish to ~/etc/shells~
-#+BEGIN_SRC sh :results silent
+#+NAME: add_fish_to_shells
+#+BEGIN_SRC sh :results output
   if grep -qF "fish" /etc/shells;then
       echo 'fish is already in /etc/shells'
   else
@@ -25,26 +24,31 @@ Add fish to ~/etc/shells~
 #+END_SRC
 
 Change shell.
-#+BEGIN_SRC sh :results silent
+#+NAME: change_shell
+#+BEGIN_SRC sh :results output
   if [[ $SHELL != *"fish" ]]; then
       chsh -s /usr/local/bin/fish
+  else
+      echo "already using fish"
   fi
 #+END_SRC
 
 Install fisherman.
-#+BEGIN_SRC sh :results silent
+#+NAME: install_fisherman
+#+BEGIN_SRC sh :results output
   curl -Lo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
 #+END_SRC
 
 Install plugins.
 
-#+BEGIN_SRC sh :tangle no :results silent
+#+NAME: install_plugins
+#+BEGIN_SRC sh :tangle no :results output
   fisher
 #+END_SRC
 
 * Config
 :PROPERTIES:
-:header-args: :tangle .dist/src/.config/fish/config.fish :mkdirp yes
+:header-args: :tangle .dist/src/.config/fish/config.fish :mkdirp yes :eval no
 :END:
 fish config file `~/.config/fish/config.fish`.
 #+BEGIN_SRC conf
@@ -62,7 +66,7 @@ fish config file `~/.config/fish/config.fish`.
 
 * Plugins
 :PROPERTIES:
-:header-args: :tangle .dist/src/.config/fish/fishfile :mkdirp yes
+:header-args: :tangle .dist/src/.config/fish/fishfile :mkdirp yes :eval no
 :END:
 [[https://github.com/fisherman/fisherman][fisherman]] is plugin manager for fish shell. I try not to use lots of plugins.
 The following content goes to `~/.config/fish/fishfile`.
@@ -72,12 +76,3 @@ The following content goes to `~/.config/fish/fishfile`.
 #+END_SRC
 
 
-
-* Link
-
-#+BEGIN_SRC sh :tangle no
-  [ -e ~/.config/fish/config.fish ] && rm ~/.config/fish/config.fish
-  [ -e ~/.config/fish/fishfile ] && rm ~/.config/fish/fishfile
-  ln -s $(pwd)/.dist/fish/config.fish ~/.config/fish/config.fish
-  ln -s $(pwd)/.dist/fish/fishfile ~/.config/fish/fishfile
-#+END_SRC

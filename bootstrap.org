@@ -35,7 +35,6 @@ Borrowed from homebrew install script. get the git command of the system.
 #+END_SRC
 
 
-
 * link all the files
 
 #+BEGIN_SRC ruby :tangle .dist/bin/link.rb :tangle-mode (identity #o755) 
@@ -92,7 +91,8 @@ Borrowed from homebrew install script. get the git command of the system.
   end
 #+END_SRC
 
-* Tangle
+* Bin
+** Tangle org file
 :PROPERTIES:
 :header-args: :tangle .dist/bin/tangle.el :mkdirp yes :tangle-mode (identity #o755)
 :END:
@@ -106,5 +106,33 @@ Borrowed from homebrew install script. get the git command of the system.
     (message "---> %s" file)
     (find-file file)
     (org-babel-tangle)
+    (kill-buffer))
+#+END_SRC
+
+** Run org file
+:PROPERTIES:
+:header-args: :tangle .dist/bin/run.el :mkdirp yes :tangle-mode (identity #o755)
+:END:
+
+#+BEGIN_SRC emacs-lisp
+  #!/usr/bin/env emacs --script
+
+  (package-initialize)
+  (require 'org)
+  (require 'ob)
+  (require 'ob-shell)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+  '(
+     (shell . t)
+     ))
+
+  (setq org-confirm-babel-evaluate nil)
+
+  (dolist (file argv)
+    (message "---> %s" file)
+    (find-file file)
+    (org-babel-execute-buffer)
     (kill-buffer))
 #+END_SRC

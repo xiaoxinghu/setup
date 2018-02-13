@@ -12,7 +12,7 @@ switch to a new computer.
 * GUI environment
 The =plist= file for setting up =PATH= for GUI applications.
 
-#+BEGIN_SRC conf :tangle .dist/src/Library/LaunchAgents/x.env.plist :mkdirp yes
+#+BEGIN_SRC conf :tangle .dist/src/Library/LaunchAgents/x.env.plist :mkdirp yes :eval no
      <?xml version="1.0" encoding="UTF-8"?>
      <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
      <plist version="1.0">
@@ -36,14 +36,19 @@ The =plist= file for setting up =PATH= for GUI applications.
 
 * setup homebrew                                                         :sh:
 
-#+BEGIN_SRC sh :tangle no :results silent
-     /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
-     brew update
-     brew doctor
-     # brew tap Homebrew/bundle
+#+NAME: setup_homebrew
+#+BEGIN_SRC sh :tangle no :results output
+  if ![[ which -s brew ]]; then
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  fi
+  brew update
+  # brew tap Homebrew/bundle
 #+END_SRC
 
 * Brewfile
+:PROPERTIES:
+:header-args: :eval no
+:END:
 
 ** Basic
 
@@ -102,7 +107,7 @@ Enable system-wide hotkey.
 
 I choose not to tangle dictionary files because I want to use symbol links,
 for easy save new words.
-#+BEGIN_SRC sh :exports results :results output :tangle no
+#+BEGIN_SRC sh :exports results :results output :tangle no :eval no
     for file in "$(pwd -P)"/dictionary/*; do
       target="${ZDOTDIR:-$HOME}/.$(basename $file)"
       if [[ -h "$target" || -a "$target" ]]; then
@@ -118,7 +123,7 @@ for easy save new words.
 :END:
 
 This is for fixing ssh keys in macOS Sierra. Following [[https://github.com/jirsbek/SSH-keys-in-macOS-Sierra-keychain][this]] article.
-#+BEGIN_SRC conf
+#+BEGIN_SRC conf :eval no
     Host *
       AddKeysToAgent yes
       UseKeychain yes
