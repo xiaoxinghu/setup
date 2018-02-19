@@ -1,3 +1,45 @@
 #+TITLE: Setup of My Computer
 
-This project holds most of important setup information of my computer.
+I am always a fan of the concept of =living document=. I think it begins not
+long after I got my first job after graduated from Uni. After an intense period
+of development, we started a long boring process of replenishing documentation
+for the software.
+
+#+BEGIN_QUOTE
+A living document, also known as an evergreen document or dynamic document, is a
+document that is continually edited and updated.
+
+-- Wikipedia
+#+END_QUOTE
+
+* [[file:fish.org][Shell]]
+
+I've been using zsh for a long time, for it's power. But I found that I don't
+need those power most of the time and it's a pain to maintain a complex config.
+Then I found fish. I am currently settled on it. I also have a simple [[file:bash.org][bash setup]],
+because you will always run into it somehow. It's everywhere.
+
+* [[file:spacemacs.org][Emacs]]
+
+This is the heaviest of them all. I switch from system to system, finally
+settled on spacemacs (again).
+
+* [[file:vim.org][Vim]]
+
+Yes, I also use vim from time to time. Not so often though.
+
+* [[file:macos.org][macOS]]
+
+My daily computer is running macOS. Sometimes I need to switch between different
+devices (work MacBook Pro, iMac at home...). This is for getting them in sync.
+Also make life easier after I bought a new computer or reinstall the system for
+some reason.
+
+* [[file:tmux.org][tmux]]
+
+Tmux is a must have for me because I live in terminals.
+
+
+* Other Small things
+
+- [[file:javascript.org][JavaScript Lint Config]]
