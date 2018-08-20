@@ -16,12 +16,11 @@ brew 'aspell', args: ['with-lang-en']
 
 # casks
 cask 'google-chrome'
-#cask 'emacs'
-cask 'emacs-mac'
 cask '1password'
 cask 'istat-menus'
 cask 'bartender'
 cask 'slack'
 cask 'skype'
-cask 'hyper'
 cask 'font-hack-nerd-font'
+cask 'karabiner-elements'
+cask 'hammerspoon'

@@ -72,15 +72,14 @@ These are the *must haves*, for any Mac machine that I have to be working on.
 
   # casks
   cask 'google-chrome'
-  #cask 'emacs'
-  cask 'emacs-mac'
   cask '1password'
   cask 'istat-menus'
   cask 'bartender'
   cask 'slack'
   cask 'skype'
-  cask 'hyper'
   cask 'font-hack-nerd-font'
+  cask 'karabiner-elements'
+  cask 'hammerspoon'
 #+END_SRC
 
 ** Personal
