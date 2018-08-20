@@ -1,4 +1,3 @@
-
 tap 'caskroom/cask'
 tap 'caskroom/fonts'
 tap 'railwaycat/emacsmacport'
@@ -9,12 +8,11 @@ brew 'hub'
 brew 'coreutils'
 brew 'fish'
 brew 'vim'
-brew 'emacs'
+brew 'emacs-plus'
 brew 'tmux'
 brew 'reattach-to-user-namespace'
 brew 'the_silver_searcher'
 brew 'aspell', args: ['with-lang-en']
-brew 'yarn'
 
 # casks
 cask 'google-chrome'
