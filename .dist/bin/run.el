@@ -4,10 +4,12 @@
 (require 'org)
 (require 'ob)
 (require 'ob-shell)
+(require 'ob-ruby)
 
 (org-babel-do-load-languages
  'org-babel-load-languages
-'(
+ '(
+   (ruby . t)
    (shell . t)
    ))
 

@@ -121,10 +121,12 @@ Borrowed from homebrew install script. get the git command of the system.
   (require 'org)
   (require 'ob)
   (require 'ob-shell)
+  (require 'ob-ruby)
 
   (org-babel-do-load-languages
    'org-babel-load-languages
-  '(
+   '(
+     (ruby . t)
      (shell . t)
      ))
 
