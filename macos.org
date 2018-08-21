@@ -1,6 +1,7 @@
 #+SETUPFILE: .setup
 #+TITLE: macOS
-#+DESCRIPTION: Documentation of my special macOS tweaks.
+#+DESC: Documentation of my special macOS tweaks.
+#+ICON: http://cdn.huxiaoxing.com/icons/macos.png
 
 #+BEGIN_PREVIEW
 My daily driver is a MacBook Pro, this is the thing that I will run when I
