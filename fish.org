@@ -1,6 +1,7 @@
 #+TITLE: Fish
 #+DATE: 2018-01-01
 #+DESC: Fish is my daily driver for terminal.
+#+ICON: http://cdn.huxiaoxing.com/icons/terminal.png
 
 I am currently using [[https://fishshell.com/][fish]] as my default shell, this my setup.
 

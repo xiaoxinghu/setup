@@ -1,4 +1,3 @@
-
 (defun config/recompile-elpa ()
   "Recompile packages in elpa directory. Useful if you switch
   Emacs versions."

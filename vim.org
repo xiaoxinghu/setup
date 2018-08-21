@@ -2,6 +2,7 @@
 #+TITLE: Vim
 #+PROPERTY: header-args :tangle .dist/src/.vimrc
 #+DESC: Yes, I use vim too.
+#+ICON: http://cdn.huxiaoxing.com/icons/vim.png
 
 #+BEGIN_PREVIEW
 My current setup for my vim. Even I am a emacs user now, there always a place
