@@ -1,5 +1,6 @@
 require "hyper"
 require "window"
+require "shortcuts"
 
 -----------------------------------------------
 -- Reload config on write

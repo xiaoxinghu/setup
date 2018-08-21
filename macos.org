@@ -225,10 +225,23 @@ hyper:bind({}, "Right", function()
     win:setFrame(f)
 end)
 #+END_SRC
+
+** Shortcuts
+:PROPERTIES:
+:header-args: :tangle .dist/src/.hammerspoon/shortcuts.lua :mkdirp yes
+:END:
+
+Terminal.
+#+BEGIN_SRC lua
+hyper:bind({}, "t", function()
+    hs.application.launchOrFocus("iTerm")
+end)
+#+END_SRC
 ** Init
 #+BEGIN_SRC lua :tangle .dist/src/.hammerspoon/init.lua
 require "hyper"
 require "window"
+require "shortcuts"
 
 -----------------------------------------------
 -- Reload config on write
