@@ -237,6 +237,12 @@ hyper:bind({}, "t", function()
     hs.application.launchOrFocus("iTerm")
 end)
 #+END_SRC
+
+#+BEGIN_SRC lua
+hyper:bind({}, "e", function()
+    hs.application.launchOrFocus("Emacs")
+end)
+#+END_SRC
 ** Init
 #+BEGIN_SRC lua :tangle .dist/src/.hammerspoon/init.lua
 require "hyper"
