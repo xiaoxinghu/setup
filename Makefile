@@ -8,6 +8,7 @@ all: bootstrap
 
 update: $(CONFIG_FILES)
 	@$(TANGLE) $^
+	@$(LINK)
 
 bootstrap: $(SCRIPT_FILES)
 	@$(RUN) $^

@@ -4,15 +4,17 @@ hyper:bind({}, "return", function()
     hyper.triggered = true
 end)
 
+local ratio = 3
+
 hyper:bind({}, "Left", function()
     local win = hs.window.focusedWindow()
     local f = win:frame()
     local screen = win:screen()
     local max = screen:frame()
-
+    local width = math.max(600, max.w / ratio)
     f.x = max.x
     f.y = max.y
-    f.w = max.w / 3
+    f.w = width
     f.h = max.h
     win:setFrame(f)
 end)
@@ -22,10 +24,10 @@ hyper:bind({}, "Right", function()
     local f = win:frame()
     local screen = win:screen()
     local max = screen:frame()
-
-    f.x = max.x + (max.w / 3 * 2)
+    local width = math.max(600, max.w / ratio)
+    f.x = max.w - width
     f.y = max.y
-    f.w = max.w / 3
+    f.w = width
     f.h = max.h
     win:setFrame(f)
 end)

@@ -195,6 +195,11 @@ hyper:bind({}, "return", function()
 end)
 #+END_SRC
 
+Some config.
+#+BEGIN_SRC lua
+local ratio = 3
+#+END_SRC
+
 Move current window to 1/3 on the left.
 #+BEGIN_SRC lua
 hyper:bind({}, "Left", function()
@@ -202,10 +207,10 @@ hyper:bind({}, "Left", function()
     local f = win:frame()
     local screen = win:screen()
     local max = screen:frame()
-
+    local width = math.max(600, max.w / ratio)
     f.x = max.x
     f.y = max.y
-    f.w = max.w / 3
+    f.w = width
     f.h = max.h
     win:setFrame(f)
 end)
@@ -218,10 +223,10 @@ hyper:bind({}, "Right", function()
     local f = win:frame()
     local screen = win:screen()
     local max = screen:frame()
-
-    f.x = max.x + (max.w / 3 * 2)
+    local width = math.max(600, max.w / ratio)
+    f.x = max.w - width
     f.y = max.y
-    f.w = max.w / 3
+    f.w = width
     f.h = max.h
     win:setFrame(f)
 end)
