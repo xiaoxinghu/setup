@@ -1,5 +1,5 @@
 hyper:bind({}, "t", function()
-    hs.application.launchOrFocus("iTerm")
+    hs.application.launchOrFocus("Terminal")
 end)
 
 hyper:bind({}, "e", function()

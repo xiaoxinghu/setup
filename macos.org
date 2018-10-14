@@ -240,7 +240,7 @@ end)
 Terminal.
 #+BEGIN_SRC lua
 hyper:bind({}, "t", function()
-    hs.application.launchOrFocus("iTerm")
+    hs.application.launchOrFocus("Terminal")
 end)
 #+END_SRC
 
